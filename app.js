@@ -31,9 +31,7 @@ app.post('/bot/message', async (req, res) => {
 });
 
 app.get(`/bot/updates`, async (req, res) => {
-  const updates = await axios(process.env.TELEGRAM_URL + token + '/getUpdates')
-    .then(r => r?.data?.result);
-  console.log(JSON.stringify(updates));
+  bot.getUpdates({ limit: 10 });
   res.sendStatus(200);
 });
 
