@@ -1,7 +1,7 @@
 # crmbot
 
 ## Why?
-I have some free time and my brother need some CRM bot to ease their business process to maintain their business.
+I have some free time and my brother need some CRM bot so they can maintain their business easier.
 
 #### Telegram require us to use https in our development environment, so you need to create your own SSL certificate to use this. Use below script to generate:
 ```bash
