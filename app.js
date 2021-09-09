@@ -77,10 +77,12 @@ bot.on('callback_query', (query) => {
   if (query.data === 'tackled') {
     const from = query.from.first_name.toUpperCase();
     const { text, message_id: messageId } = query.message;
+    console.log(query.message);
     const chatId = query.message.chat.id;
+    const whatsappUrl = query.message.entities[0].url;
 
     bot.editMessageText(
-      text + `\n\nTackled by <b>${from}</b>`,
+      text + `\n\nTackled by <b>${from}</b>\nContact customer by using <a href="${whatsappUrl}">this link</a>`,
       {
         message_id: messageId,
         chat_id: chatId,
