@@ -3,21 +3,21 @@ const https = require('https');
 const path = require('path');
 const express = require('express');
 const TelegramBot = require('node-telegram-bot-api');
-const order = require('./api/order');
-
 require('dotenv').config({
   path: process.env.NODE_ENV === 'development'
-    ? path.resolve(__dirname, '../.env')
-    : path.resolve(__dirname, `../.env.${process.env.NODE_ENV}`)
+    ? path.resolve(__dirname, './.env')
+    : path.resolve(__dirname, `./.env.${process.env.NODE_ENV}`)
 });
-
 const port = process.env.PORT;
 
-const key = process.env.NODE_ENV === 'development' ? fs.readFileSync(path.resolve(__dirname, '../certs/key.pem')) : null;
-const cert = process.env.NODE_ENV === 'development' ? fs.readFileSync(path.resolve(__dirname, '../certs/cert.pem')) : null;
+const key = process.env.NODE_ENV === 'development' ? fs.readFileSync(path.resolve(__dirname, './certs/key.pem')) : null;
+const cert = process.env.NODE_ENV === 'development' ? fs.readFileSync(path.resolve(__dirname, './certs/cert.pem')) : null;
 
 const token = process.env.TOKEN;
 const bot = new TelegramBot(token, { polling: true });
+
+const order = require('./api/order')(bot);
+const index = require('./api/index');
 
 const app = express();
 
@@ -25,10 +25,11 @@ const server = process.env.NODE_ENV === 'development' && https.createServer({ ke
 
 app.use(express.json());
 app.use(express.urlencoded({
-  extended: true
+  extended: false
 }));
 
-app.use('/api/order', order);
+app.use('/', index)
+app.use('/', order);
 
 // app.post('/api/bot/message', async (req, res) => {
 //   bot.sendMessage(process.env.GROUP_ID, 'hello world');
