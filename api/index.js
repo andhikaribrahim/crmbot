@@ -40,26 +40,31 @@ app.get(`/api/bot/updates`, async (req, res) => {
 
 app.post(`/api/bot/order`, async (req, res) => {
   console.log(process.env.GROUP_ID)
-  bot.sendMessage(
-    process.env.GROUP_ID,
-    orderMessage(req.body),
-    {
-      parse_mode: 'HTML',
-      reply_markup: {
-        one_time_keyboard: true,
-        resize_keyboard: true,
-        inline_keyboard: [
-          [
-            {
-              text: 'Tackle',
-              callback_data: 'tackled'
-            }
+  try {
+    bot.sendMessage(
+      process.env.GROUP_ID,
+      orderMessage(req.body),
+      {
+        parse_mode: 'HTML',
+        reply_markup: {
+          one_time_keyboard: true,
+          resize_keyboard: true,
+          inline_keyboard: [
+            [
+              {
+                text: 'Tackle',
+                callback_data: 'tackled'
+              }
+            ]
           ]
-        ]
+        }
       }
-    }
-  );
-  res.sendStatus(200);
+    );
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
 });
 
 if (process.env.NODE_ENV === 'development') {
@@ -81,7 +86,7 @@ if (process.env.NODE_ENV === 'development') {
 
 /* Callback listener */
 bot.on('callback_query', (query) => {
-  console.log(tackled);
+  console.log(query);
   if (query.data === 'tackled') {
     const from = query.from.first_name.toUpperCase();
     const { text, message_id: messageId } = query.message;
