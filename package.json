@@ -2,11 +2,11 @@
   "name": "crmbot",
   "version": "1.0.0",
   "description": "CRM Bot PepeLaugh",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "NODE_ENV=development nodemon ./api/index.js",
-    "start": "NODE_ENV=production node ./api/index.js"
+    "dev": "NODE_ENV=development nodemon index.js",
+    "start": "NODE_ENV=production node index.js"
   },
   "repository": {
     "type": "git",
