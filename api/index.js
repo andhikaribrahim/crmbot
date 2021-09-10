@@ -39,6 +39,7 @@ app.get(`/api/bot/updates`, async (req, res) => {
 });
 
 app.post(`/api/bot/order`, async (req, res) => {
+  console.log(process.env.GROUP_ID)
   bot.sendMessage(
     process.env.GROUP_ID,
     orderMessage(req.body),
@@ -61,15 +62,9 @@ app.post(`/api/bot/order`, async (req, res) => {
   res.sendStatus(200);
 });
 
-if (process.env.NODE_ENV === 'development') {
-  server.listen(port, () => {
-    console.log(`listening on ${port}`);
-  });
-} else {
-  app.listen(port, () => {
-    console.log(`listening on ${port}`);
-  });
-}
+server.listen(port, () => {
+  console.log(`listening on ${port}`);
+});
 
 /* Ping bot */
 // bot.on('message', context => {
@@ -80,6 +75,7 @@ if (process.env.NODE_ENV === 'development') {
 
 /* Callback listener */
 bot.on('callback_query', (query) => {
+  console.log(tackled);
   if (query.data === 'tackled') {
     const from = query.from.first_name.toUpperCase();
     const { text, message_id: messageId } = query.message;
