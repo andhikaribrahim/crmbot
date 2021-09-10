@@ -21,7 +21,7 @@ const bot = new TelegramBot(token, { polling: true });
 
 const app = express();
 
-const server = https.createServer({ key: key, cert: cert }, app);
+const server = process.env.NODE_ENV === 'development' && https.createServer({ key: key, cert: cert }, app);
 
 app.use(express.json());
 app.use(express.urlencoded({
