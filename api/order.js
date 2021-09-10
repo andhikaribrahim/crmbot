@@ -1,12 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const orderMessage = require('../messaging/order');
-// const TelegramBot = require('node-telegram-bot-api');
-// const token = process.env.TOKEN;
-// const bot = new TelegramBot(token, { polling: true });
 
 module.exports = function(bot) {
-  return router.post('/api/order', async (req, res, next) => {
+  return router.post('/api/order', async (req, res) => {
     try {
       await bot.sendMessage(
         process.env.GROUP_ID,

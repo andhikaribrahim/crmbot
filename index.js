@@ -14,10 +14,17 @@ const key = process.env.NODE_ENV === 'development' ? fs.readFileSync(path.resolv
 const cert = process.env.NODE_ENV === 'development' ? fs.readFileSync(path.resolve(__dirname, './certs/cert.pem')) : null;
 
 const token = process.env.TOKEN;
-const bot = new TelegramBot(token, { polling: true });
 
+let bot;
+if (process.env.NODE_ENV === 'production') {
+  bot = new TelegramBot(token);
+  bot.setWebHook(process.env.APP_URL + token);
+} else {
+  bot = new TelegramBot(token, { polling: true });
+}
+
+const webhook = require('./api/webhook')(bot);
 const order = require('./api/order')(bot);
-const index = require('./api/index');
 
 const app = express();
 
@@ -28,7 +35,7 @@ app.use(express.urlencoded({
   extended: false
 }));
 
-app.use('/', index)
+app.use('/', webhook);
 app.use('/', order);
 
 // app.post('/api/bot/message', async (req, res) => {
@@ -61,7 +68,7 @@ bot.on('message', context => {
 
 /* Callback listener */
 bot.on('callback_query', (query) => {
-  console.log(query);
+  // console.log(query);
   if (query.data === 'tackled') {
     const from = query.from.first_name.toUpperCase();
     const { text, message_id: messageId } = query.message;
