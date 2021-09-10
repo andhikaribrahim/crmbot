@@ -13,8 +13,8 @@ require('dotenv').config({
 
 const port = process.env.PORT;
 
-const key = fs.readFileSync(path.resolve(__dirname, '../certs/key.pem'));
-const cert = fs.readFileSync(path.resolve(__dirname, '../certs/cert.pem'));
+const key = process.env.NODE_ENV === 'development' ? fs.readFileSync(path.resolve(__dirname, '../certs/key.pem')) : null;
+const cert = process.env.NODE_ENV === 'development' ? fs.readFileSync(path.resolve(__dirname, '../certs/cert.pem')) : null;
 
 const token = process.env.TOKEN;
 const bot = new TelegramBot(token, { polling: true });
