@@ -4,6 +4,7 @@ const orderMessage = require('../messaging/order');
 
 module.exports = function(bot) {
   return router.post('/api/order', async (req, res) => {
+    console.log(process.env.WEBHOOK_URL);
     try {
       await bot.sendMessage(
         process.env.GROUP_ID,
