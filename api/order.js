@@ -17,7 +17,7 @@ module.exports = function(bot) {
           reply_markup: {
             one_time_keyboard: true,
             resize_keyboard: true,
-            inline_keyboard: [
+            keyboard: [
               [
                 {
                   text: 'Tackle',
