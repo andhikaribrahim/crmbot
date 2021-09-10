@@ -3,6 +3,7 @@ const https = require('https');
 const path = require('path');
 const express = require('express');
 const TelegramBot = require('node-telegram-bot-api');
+const cors = require('cors');
 require('dotenv').config({
   path: process.env.NODE_ENV === 'development'
     ? path.resolve(__dirname, './.env')
@@ -30,6 +31,7 @@ const app = express();
 
 const server = process.env.NODE_ENV === 'development' && https.createServer({ key: key, cert: cert }, app);
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({
   extended: false
