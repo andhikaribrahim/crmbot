@@ -18,7 +18,7 @@ const token = process.env.TOKEN;
 let bot;
 if (process.env.NODE_ENV === 'production') {
   bot = new TelegramBot(token);
-  bot.setWebHook(process.env.APP_URL + token);
+  // bot.setWebHook(process.env.WEBHOOK_URL + token);
 } else {
   bot = new TelegramBot(token, { polling: true });
 }
@@ -38,16 +38,6 @@ app.use(express.urlencoded({
 app.use('/', webhook);
 app.use('/', order);
 
-// app.post('/api/bot/message', async (req, res) => {
-//   bot.sendMessage(process.env.GROUP_ID, 'hello world');
-//   res.sendStatus(200);
-// });
-
-// app.get(`/api/bot/updates`, async (req, res) => {
-//   bot.getUpdates({ limit: 10 });
-//   res.sendStatus(200);
-// });
-
 if (process.env.NODE_ENV === 'development') {
   server.listen(port, () => {
     console.log(`listening on ${port}`);
@@ -55,6 +45,7 @@ if (process.env.NODE_ENV === 'development') {
 } else {
   app.listen(port, () => {
     console.log(`listening on ${port}`);
+    bot.setWebHook(process.env.WEBHOOK_URL + process.env.TOKEN);
   });
 }
 
