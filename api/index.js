@@ -62,9 +62,15 @@ app.post(`/api/bot/order`, async (req, res) => {
   res.sendStatus(200);
 });
 
-server.listen(port, () => {
-  console.log(`listening on ${port}`);
-});
+if (process.env.NODE_ENV === 'development') {
+  server.listen(port, () => {
+    console.log(`listening on ${port}`);
+  });
+} else {
+  app.listen(port, () => {
+    console.log(`listening on ${port}`);
+  });
+}
 
 /* Ping bot */
 // bot.on('message', context => {
