@@ -7,7 +7,6 @@ const orderMessage = require('../messaging/order');
 
 module.exports = function(bot) {
   return router.post('/api/order', async (req, res, next) => {
-    console.log('sempak');
     try {
       await bot.sendMessage(
         process.env.GROUP_ID,
@@ -17,7 +16,7 @@ module.exports = function(bot) {
           reply_markup: {
             one_time_keyboard: true,
             resize_keyboard: true,
-            keyboard: [
+            inline_keyboard: [
               [
                 {
                   text: 'Tackle',

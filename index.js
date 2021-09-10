@@ -54,7 +54,8 @@ if (process.env.NODE_ENV === 'development') {
 /* Ping bot */
 bot.on('message', context => {
   if (process.env.NODE_ENV === 'development') {
-    bot.sendMessage(context.chat.id, 'Hello sir!');
+    // bot.sendMessage(context.chat.id, 'Hello sir!');
+    // console.log(context);
   }
 });
 
