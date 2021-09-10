@@ -78,11 +78,11 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 /* Ping bot */
-// bot.on('message', context => {
-//   if (process.env.NODE_ENV === 'development') {
-//     bot.sendMessage(context.chat.id, 'Hello sir!');
-//   }
-// });
+bot.on('message', context => {
+  if (process.env.NODE_ENV === 'development') {
+    bot.sendMessage(context.chat.id, 'Hello sir!');
+  }
+});
 
 /* Callback listener */
 bot.on('callback_query', (query) => {
