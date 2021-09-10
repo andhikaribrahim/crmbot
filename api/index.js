@@ -3,18 +3,18 @@ const https = require('https');
 const path = require('path');
 const express = require('express');
 const TelegramBot = require('node-telegram-bot-api');
-const orderMessage = require('./messaging/order');
-
-const port = 3000;
+const orderMessage = require('../messaging/order');
 
 require('dotenv').config({
   path: process.env.NODE_ENV === 'development'
-    ? path.resolve(__dirname, './.env')
-    : path.resolve(__dirname, `./.env.${process.env.NODE_ENV}`)
+    ? path.resolve(__dirname, '../.env')
+    : path.resolve(__dirname, `../.env.${process.env.NODE_ENV}`)
 });
 
-const key = fs.readFileSync(path.resolve(__dirname, './certs/key.pem'));
-const cert = fs.readFileSync(path.resolve(__dirname, './certs/cert.pem'));
+const port = process.env.PORT;
+
+const key = fs.readFileSync(path.resolve(__dirname, '../certs/key.pem'));
+const cert = fs.readFileSync(path.resolve(__dirname, '../certs/cert.pem'));
 
 const token = process.env.TOKEN;
 const bot = new TelegramBot(token, { polling: true });
@@ -28,17 +28,17 @@ app.use(express.urlencoded({
   extended: true
 }));
 
-app.post('/bot/message', async (req, res) => {
+app.post('/api/bot/message', async (req, res) => {
   bot.sendMessage(process.env.GROUP_ID, 'hello world');
   res.sendStatus(200);
 });
 
-app.get(`/bot/updates`, async (req, res) => {
+app.get(`/api/bot/updates`, async (req, res) => {
   bot.getUpdates({ limit: 10 });
   res.sendStatus(200);
 });
 
-app.post(`/bot/order`, async (req, res) => {
+app.post(`/api/bot/order`, async (req, res) => {
   bot.sendMessage(
     process.env.GROUP_ID,
     orderMessage(req.body),
@@ -61,9 +61,15 @@ app.post(`/bot/order`, async (req, res) => {
   res.sendStatus(200);
 });
 
-server.listen(port, () => {
-  console.log(`listening on ${port}`);
-});
+if (process.env.NODE_ENV === 'development') {
+  server.listen(port, () => {
+    console.log(`listening on ${port}`);
+  });
+} else {
+  app.listen(port, () => {
+    console.log(`listening on ${port}`);
+  });
+}
 
 /* Ping bot */
 // bot.on('message', context => {
@@ -77,7 +83,6 @@ bot.on('callback_query', (query) => {
   if (query.data === 'tackled') {
     const from = query.from.first_name.toUpperCase();
     const { text, message_id: messageId } = query.message;
-    console.log(query.message);
     const chatId = query.message.chat.id;
     const whatsappUrl = query.message.entities[0].url;
 
